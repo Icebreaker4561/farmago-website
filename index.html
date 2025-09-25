@@ -6,22 +6,29 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="preconnect" href="https://farmago-web-api.onrender.com">
     <style>
-      body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;max-width:900px;margin:28px auto;padding:0 12px;color:#111}
+      :root{--fg:#111;--muted:#666;--br:#e8e8e8;--pri:#1a73e8}
+      body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;max-width:900px;margin:28px auto;padding:0 12px;color:var(--fg)}
       h1{font-size:22px;margin:0 0 12px}
-      input{width:100%;padding:12px 14px;border:1px solid #ddd;border-radius:10px;font-size:16px}
-      .hint{color:#666;font-size:13px;margin:8px 0 16px}
-      .section{margin:18px 0}
-      .title{font-weight:700;margin:14px 0 8px}
-      .item{padding:10px 12px;border:1px solid #eee;border-radius:10px;margin:8px 0}
-      .muted{color:#666}
-      .disc{margin-top:18px;font-size:13px;color:#555}
+      .row{display:flex;gap:8px}
+      input{flex:1;padding:12px 14px;border:1px solid var(--br);border-radius:10px;font-size:16px}
+      .hint{color:var(--muted);font-size:13px;margin:8px 0 16px}
+      .section{margin:22px 0}
+      .title{font-weight:700;margin:0 0 8px}
+      .item{padding:12px 14px;border:1px solid var(--br);border-radius:10px;margin:8px 0;line-height:1.4}
+      .muted{color:var(--muted)}
+      .err{background:#fff3f2;border:1px solid #ffd1cd;color:#b3261e;padding:12px 14px;border-radius:10px}
+      .sk{border:1px solid var(--br);border-radius:10px;margin:8px 0;height:72px;background:linear-gradient(90deg,#f6f7f8 0,#edeef1 50%,#f6f7f8 100%);background-size:200% 100%;animation:sh 1.2s linear infinite}
+      @keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
+      .disc{margin-top:18px;font-size:13px;color:var(--muted)}
     </style>
   </head>
   <body>
     <h1>Farmago Web</h1>
-    <input id="q" placeholder="Нурофен 400" autocomplete="off">
+    <div class="row">
+      <input id="q" placeholder="Нурофен 400" autocomplete="off">
+    </div>
     <div class="hint">Поиск по общей базе. Пример: “Нурофен 400”, “ibuprofen 200”.</div>
-    <div id="results"></div>
-    <script src="script.js"></script>
+    <div id="root"></div>
+    <script src="script.js?v=3"></script>
   </body>
 </html>
