@@ -2,6 +2,9 @@ const API_URL='https://farmago-web-api.onrender.com';
 const root=document.getElementById('root');
 const qEl=document.getElementById('q');
 
+
+const stripPrice=(t='')=>{t=String(t);t=t.replace(/\d+[\.,]?\d*\s*₾/g,'');t=t.replace(/-?\s*\d+\s*%/g,'');t=t.replace(/\s{2,}/g,' ').trim();return t;};
+const preferRU=(r)=>{const ru=(r.title_russian||'').trim();if(ru && !['nan','NaN','none','None','null','undefined'].includes(ru)) return stripPrice(ru); const cand=[r.title_english,r.title,r.name].map(x=>stripPrice(x||'')); return cand.find(Boolean)||'';};
 let state={q:'',loading:false,err:null,data:null};
 
 const hasKA = (s='') => /[ა-ჰ]/.test(String(s));
@@ -15,9 +18,9 @@ const pharmacyLine = (r) => {
 };
 
 const linkLine = (r) => {
-  const en  = clean(r.title_english);
-  const base= clean(r.title);
-  const nm  = clean(r.name);
+  const en  = stripPrice(clean(r.title_english));
+  const base= stripPrice(clean(r.title));
+  const nm  = stripPrice(clean(r.name));
   const ge  = [base,nm].find(hasKA) || '';
   const lat = [en, (!hasKA(base)?base:''), (!hasKA(nm)?nm:'')].find(s=>s) || '';
   const url = clean(r.url) || '#';
@@ -26,9 +29,9 @@ const linkLine = (r) => {
 };
 
 const ruLine = (r) => {
-  const ru  = clean(r.title_russian);
+  const ru  = stripPrice(clean(r.title_russian));
   const lat = [clean(r.title_english), clean(r.title), clean(r.name)].find(s=>s) || '';
-  const text = ru || lat || 'Без названия';
+  const text = preferRU(r) || lat || 'Без названия';
   return `💊 ${text}`;
 };
 
