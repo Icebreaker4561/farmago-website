@@ -818,3 +818,24 @@ body {
   --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
 }
 }
+
+
+/* Sticky results header */
+.results-header {
+  position: sticky;
+  top: 60px; /* Below main header */
+  background: var(--gray-50);
+  z-index: 50;
+  padding: var(--space-4) var(--space-2);
+  margin: 0 calc(-1 * var(--space-4)) var(--space-6);
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.results-screen {
+  padding-top: 0; /* Remove top padding since header is sticky */
+}
+
+/* Ensure results content has proper spacing */
+.results-content {
+  padding: 0 var(--space-2);
+}
