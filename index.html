@@ -1,34 +1,151 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="utf-8">
-    <title>Farmago Web</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link rel="preconnect" href="https://farmago-web-api.onrender.com">
-    <style>
-      :root{--fg:#111;--muted:#666;--br:#e8e8e8;--pri:#1a73e8}
-      body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;max-width:900px;margin:28px auto;padding:0 12px;color:var(--fg)}
-      h1{font-size:22px;margin:0 0 12px}
-      .row{display:flex;gap:8px}
-      input{flex:1;padding:12px 14px;border:1px solid var(--br);border-radius:10px;font-size:16px}
-      .hint{color:var(--muted);font-size:13px;margin:8px 0 16px}
-      .section{margin:22px 0}
-      .title{font-weight:700;margin:0 0 8px}
-      .item{padding:12px 14px;border:1px solid var(--br);border-radius:10px;margin:8px 0;line-height:1.4}
-      .muted{color:var(--muted)}
-      .err{background:#fff3f2;border:1px solid #ffd1cd;color:#b3261e;padding:12px 14px;border-radius:10px}
-      .sk{border:1px solid var(--br);border-radius:10px;margin:8px 0;height:72px;background:linear-gradient(90deg,#f6f7f8 0,#edeef1 50%,#f6f7f8 100%);background-size:200% 100%;animation:sh 1.2s linear infinite}
-      @keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
-      .disc{margin-top:18px;font-size:13px;color:var(--muted)}
-    </style>
-  </head>
-  <body>
-    <h1>Farmago Web</h1>
-    <div class="row">
-      <input id="q" placeholder="Нурофен 400" autocomplete="off">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmago - Дешевые лекарства в Грузии</title>
+    <link rel="stylesheet" href="styles.css?v=14">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💊</text></svg>">
+</head>
+<body>
+    <!-- Header with language toggle -->
+    <header class="header">
+        <div class="lang-toggle">
+            <button class="lang-btn active" data-lang="ru">RU</button>
+            <button class="lang-btn" data-lang="ka">KA</button>
+        </div>
+        <button class="info-btn" id="infoBtn">ⓘ</button>
+    </header>
+
+    <!-- Main content -->
+    <main class="main" id="main">
+        <!-- Landing screen -->
+        <div class="screen landing-screen" id="landingScreen">
+            <div class="hero">
+                <h1 class="logo">Farmago</h1>
+                <p class="tagline" data-key="tagline">Дешевые лекарства в Грузии</p>
+            </div>
+            
+            <div class="search-section">
+                <div class="search-bar">
+                    <input 
+                        type="text" 
+                        class="search-input" 
+                        id="searchInput"
+                        placeholder="Введите название лекарства..."
+                        data-key="search_placeholder"
+                    >
+                </div>
+                <button class="search-btn" id="searchBtn" data-key="search_button">
+                    Найти лекарство
+                </button>
+            </div>
+        </div>
+
+        <!-- Results screen -->
+        <div class="screen results-screen hidden" id="resultsScreen">
+            <div class="results-header">
+                <button class="back-btn" id="backBtn">←</button>
+                <div class="results-title">
+                    <h2 data-key="results_title">Результаты поиска</h2>
+                    <p class="results-count" id="resultsCount"></p>
+                </div>
+            </div>
+            
+            <div class="results-content" id="resultsContent">
+                <!-- Results will be rendered here -->
+            </div>
+        </div>
+
+        <!-- Empty state screen -->
+        <div class="screen empty-screen hidden" id="emptyScreen">
+            <div class="empty-content">
+                <div class="empty-icon">🔍</div>
+                <h3 data-key="empty_title">Не нашли то, что искали?</h3>
+                <p data-key="empty_subtitle">Попробуйте изменить запрос или обратитесь к нам</p>
+                
+                <div class="empty-actions">
+                    <button class="btn btn-primary" id="newSearchBtn" data-key="new_search">
+                        🔍 Новый поиск
+                    </button>
+                    <button class="btn btn-secondary" id="contactBtn" data-key="contact_us">
+                        💬 Написать нам
+                    </button>
+                </div>
+                
+                <div class="search-tips">
+                    <h4 data-key="search_tips_title">💡 Советы для поиска:</h4>
+                    <ul>
+                        <li data-key="tip_international">• Используйте международное название</li>
+                        <li data-key="tip_form">• Попробуйте другую форму (таблетки, сироп, мазь)</li>
+                        <li data-key="tip_spelling">• Проверьте правильность написания</li>
+                    </ul>
+                </div>
+                
+                <div class="popular-drugs">
+                    <h4 data-key="popular_title">🔥 Популярные препараты</h4>
+                    <div class="popular-grid">
+                        <button class="popular-item" data-query="Парацетамол">
+                            <span>Парацетамол</span>
+                            <small data-key="popular_choice">Популярный выбор</small>
+                        </button>
+                        <button class="popular-item" data-query="Ибупрофен">
+                            <span>Ибупрофен</span>
+                            <small data-key="popular_choice">Популярный выбор</small>
+                        </button>
+                        <button class="popular-item" data-query="Аспирин">
+                            <span>Аспирин</span>
+                            <small data-key="popular_choice">Популярный выбор</small>
+                        </button>
+                        <button class="popular-item" data-query="Анальгин">
+                            <span>Анальгин</span>
+                            <small data-key="popular_choice">Популярный выбор</small>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal: About Farmago -->
+    <div class="modal-overlay hidden" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 data-key="about_title">О Farmago</h3>
+                <button class="modal-close" id="modalClose">×</button>
+            </div>
+            <div class="modal-content">
+                <p data-key="about_description">
+                    Farmago — быстрый способ сравнить цены на лекарства в аптеках Грузии.
+                </p>
+                <div class="contact-links">
+                    <a href="https://t.me/a_439" class="contact-link" data-key="feedback_link">
+                        Обратная связь → @a_439
+                    </a>
+                    <a href="#" class="contact-link secondary" data-key="privacy_policy">
+                        Политика конфиденциальности
+                    </a>
+                    <a href="#" class="contact-link secondary" data-key="terms_of_use">
+                        Условия использования
+                    </a>
+                    <div class="demo-notice" data-key="demo_notice">
+                        404 Демо
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="hint">Поиск по общей базе. Пример: “Нурофен 400”, “ibuprofen 200”.</div>
-    <div id="root"></div>
-    <script src="script.js?v=12"></script>
-  </body>
+
+    <!-- Loading overlay -->
+    <div class="loading-overlay hidden" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© Farmago • <span data-key="footer_tagline">Цены на лекарства в Грузии</span></p>
+    </footer>
+
+    <script src="script.js?v=14"></script>
+</body>
 </html>
