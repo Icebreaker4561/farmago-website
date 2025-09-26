@@ -8,8 +8,18 @@ function t(k){return strings[state.lang]?.[k]||strings.ru[k]||k;}
 function clean(v){if(!v)return'';const s=String(v).trim();return['nan','NaN','none','None','null','undefined'].includes(s)?'':s;}
 function num(v){const n=Number(v);return Number.isFinite(n)?n:null;}
 function getTitle(item){
-  if(state.lang==='ka')return clean(item.title)||clean(item.name)||clean(item.title_russian)||'უცნობი';
-  return clean(item.title_russian)||clean(item.title_english)||clean(item.title)||'Без названия';
+  const ru = clean(item.title_russian);
+  const ka = clean(item.title);
+  const en = clean(item.title_english);
+  const name = clean(item.name);
+  
+  if(state.lang === 'ka') {
+    // KA mode: prefer Georgian, fallback to transliterated
+    return ka || name || ru || en || 'უცნობი';
+  } else {
+    // RU mode: ONLY Russian titles, no Georgian fallback
+    return ru || en || name || 'Название недоступно';
+  }
 }
 function updateUI(){
   document.querySelectorAll('.lang-btn').forEach(btn=>btn.classList.toggle('active',btn.dataset.lang===state.lang));
