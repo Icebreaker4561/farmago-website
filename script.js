@@ -42,3 +42,102 @@ function updateUI(){
   });
 }
 document.addEventListener('DOMContentLoaded',init);
+
+// Add missing search functionality
+function handleSearch(){
+  const query=document.getElementById('searchInput').value.trim();
+  if(!query)return;
+  state.query=query;
+  searchMedicines(query);
+}
+
+async function searchMedicines(query){
+  console.log('Searching for:',query);
+  showLoading(true);
+  try{
+    const url=new URL(`${API_URL}/search`);
+    url.searchParams.set('q',query);
+    url.searchParams.set('lang',state.lang);
+    const res=await fetch(url.toString());
+    console.log('API response:',res.status);
+    if(res.status===429){showError('rate_limit');return;}
+    if(!res.ok){showError('service');return;}
+    const data=await res.json();
+    console.log('Data:',data);
+    state.data=data;
+    renderResults(data);
+  }catch(e){
+    console.error('Search error:',e);
+    showError('network');
+  }finally{
+    showLoading(false);
+  }
+}
+
+function showLoading(show){
+  document.getElementById('loadingOverlay').classList.toggle('hidden',!show);
+  document.getElementById('searchBtn').disabled=show;
+}
+
+function showError(type){
+  showScreen('empty');
+}
+
+function showScreen(name){
+  document.getElementById('landingScreen').classList.toggle('hidden',name!=='landing');
+  document.getElementById('resultsScreen').classList.toggle('hidden',name!=='results');
+  document.getElementById('emptyScreen').classList.toggle('hidden',name!=='empty');
+}
+
+function renderResults(data){
+  if(!data||!data.ok||(!data.direct?.length&&!data.others?.length)){
+    showScreen('empty');return;
+  }
+  const total=(data.direct||[]).length+(data.others||[]).length;
+  document.getElementById('resultsCount').textContent=`«${state.query}» • ${total} результатов`;
+  let html='';
+  if(data.direct?.length){
+    html+=`<div class="results-block"><h3 class="block-title">${t('block_direct')||'Наиболее подходящие'}</h3>`;
+    data.direct.forEach(item=>html+=renderCard(item));
+    html+='</div>';
+  }
+  if(data.others?.length){
+    html+=`<div class="results-block"><h3 class="block-title">${t('block_others')||'Другие варианты'}</h3>`;
+    data.others.forEach(item=>html+=renderCard(item));
+    html+='</div>';
+  }
+  document.getElementById('resultsContent').innerHTML=html;
+  showScreen('results');
+}
+
+function renderCard(item){
+  const title=getTitle(item);
+  const price=num(item.price);
+  const pharmacy=clean(item['название аптеки']||item.pharmacy||'—');
+  const url=clean(item.url)||'#';
+  return `<div class="drug-card">
+    <div class="drug-header">
+      <div class="drug-info">
+        <div class="drug-name">${title}</div>
+      </div>
+      <div class="drug-price">${price?price.toFixed(2)+' ₾':'—'}</div>
+    </div>
+    <div class="pharmacy-info">
+      <div class="pharmacy-name">${pharmacy}</div>
+    </div>
+    <a href="${url}" target="_blank" class="pharmacy-link">${t('view_pharmacy')} ${pharmacy.toLowerCase()}.ge 🔗</a>
+  </div>`;
+}
+
+function num(v){const n=Number(v);return Number.isFinite(n)?n:null;}
+
+// Wire up events
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('searchBtn').onclick=handleSearch;
+  document.getElementById('searchInput').onkeypress=e=>{if(e.key==='Enter')handleSearch();};
+  document.getElementById('backBtn').onclick=()=>showScreen('landing');
+  document.getElementById('newSearchBtn').onclick=()=>{document.getElementById('searchInput').value='';showScreen('landing');};
+  document.getElementById('infoBtn').onclick=()=>document.getElementById('modalOverlay').classList.remove('hidden');
+  document.getElementById('modalClose').onclick=()=>document.getElementById('modalOverlay').classList.add('hidden');
+  document.getElementById('modalOverlay').onclick=e=>{if(e.target.id==='modalOverlay')e.target.classList.add('hidden');};
+});
