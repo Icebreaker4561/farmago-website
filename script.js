@@ -146,6 +146,52 @@ function handleSearch(){
   state.query=query;
   searchMedicines(query);
 }
+
+// Demo data for 404 Demo
+const demoData = {
+  ok: true,
+  query: "демо аспирин",
+  target_inn: null,
+  target_group: null,
+  direct: [],
+  similar_by_action: [],
+  others: [
+    {
+      title: "ასპირინი 0.5გ #10ტ",
+      title_russian: "Аспирин 0.5 г #10 таб.",
+      price: 0.40,
+      pharmacy: "Aversi",
+      "название аптеки": "Aversi",
+      url: "https://www.aversi.ge/ka/aversi/act/drugDet/?MatID=80480"
+    },
+    {
+      title: "ასპირინი კარდიო 100მგ#20",
+      title_russian: "Аспирин Кардио 100 мг #20",
+      price: 4.61,
+      pharmacy: "Aversi", 
+      "название аптеки": "Aversi",
+      url: "https://www.aversi.ge/ka/aversi/act/drugDet/?MatID=12345"
+    },
+    {
+      title: "ASPIRIN CARDIO 0.1გ 28 ტაბლეტი",
+      title_russian: "АСПИРИН КАРДИО 0.1 г 28 таб.",
+      price: 6.77,
+      pharmacy: "PSP",
+      "название аптеки": "PSP", 
+      url: "https://psp.ge/aspirin-cardio"
+    }
+  ],
+  disclaimer: "⚠️ Это демо-версия. Данные могут не соответствовать действительности."
+};
+
+function showDemo() {
+  console.log('Showing demo results');
+  state.query = 'демо аспирин';
+  state.data = demoData;
+  renderResults(demoData);
+  showModal(false); // Close modal
+}
+
 function init(){
   console.log('Farmago init');
   document.querySelectorAll('.lang-btn').forEach(btn=>{

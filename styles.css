@@ -839,3 +839,24 @@ body {
 .results-content {
   padding: 0 var(--space-2);
 }
+/* Demo button styling */
+.demo-notice.clickable {
+  background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+  border: 2px solid #f44336;
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  color: #d32f2f;
+}
+
+.demo-notice.clickable:hover {
+  background: linear-gradient(135deg, #ffcdd2 0%, #ef9a9a 100%);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.demo-notice.clickable:active {
+  transform: translateY(0);
+}
