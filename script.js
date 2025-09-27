@@ -67,13 +67,7 @@ function updateUI(){
     const text=t(el.dataset.key);
     if(el.tagName==='INPUT')el.placeholder=text;else el.textContent=text;
   });
-  // Demo button handler
-  const demoBtn = document.getElementById('demoBtn');
-  if(demoBtn) {
-    demoBtn.onclick = () => {
-      console.log('Demo clicked');
-      showDemo();
-    };
+;
   }
 }
 function showScreen(name){
@@ -213,13 +207,7 @@ function init(){
       console.log('Language changed to:', state.lang);
     };
   });
-  // Demo button handler
-  const demoBtn = document.getElementById('demoBtn');
-  if(demoBtn) {
-    demoBtn.onclick = () => {
-      console.log('Demo clicked');
-      showDemo();
-    };
+;
   }
   const searchBtn=document.getElementById('searchBtn');
   const searchInput=document.getElementById('searchInput');
@@ -249,13 +237,7 @@ function init(){
       if(query){handleSearch.query=query;if(searchInput)searchInput.value=query;handleSearch();}
     }
   });
-  // Demo button handler
-  const demoBtn = document.getElementById('demoBtn');
-  if(demoBtn) {
-    demoBtn.onclick = () => {
-      console.log('Demo clicked');
-      showDemo();
-    };
+;
   }
 }
 document.addEventListener('DOMContentLoaded',init);
