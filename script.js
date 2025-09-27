@@ -141,7 +141,12 @@ function handleSearch(){
 function init(){
   console.log('Farmago init');
   document.querySelectorAll('.lang-btn').forEach(btn=>{
-    btn.onclick=()=>{state.lang=btn.dataset.lang;updateUI();localStorage.setItem('farmago_lang',state.lang);};
+    btn.onclick=()=>{
+      state.lang=btn.dataset.lang;
+      localStorage.setItem('farmago_lang',state.lang);
+      setTimeout(() => updateUI(), 50);
+      console.log('Language changed to:', state.lang);
+    };
   });
   const searchBtn=document.getElementById('searchBtn');
   const searchInput=document.getElementById('searchInput');
@@ -157,7 +162,11 @@ function init(){
   if(modalClose)modalClose.onclick=()=>showModal(false);
   if(modalOverlay)modalOverlay.onclick=e=>{if(e.target===modalOverlay)showModal(false);};
   if(newSearchBtn)newSearchBtn.onclick=()=>{if(searchInput)searchInput.value='';showScreen('landing');};
-  updateUI();
+  // Ensure DOM is ready before updating UI
+  setTimeout(() => {
+    updateUI();
+    console.log('UI updated with lang:', state.lang);
+  }, 100);
   if(searchInput)searchInput.focus();
   // Popular drugs handler
   document.addEventListener('click',(e)=>{
