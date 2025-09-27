@@ -20,6 +20,10 @@ const strings={
     tip_form:'Попробуйте другую форму (таблетки, сироп, мазь)',
     tip_spelling:'Проверьте правильность написания',
     popular_title:'🔥 Популярные препараты',
+        feedback_link:'Обратная связь → @a_439',
+    privacy_policy:'Политика конфиденциальности',
+    terms_of_use:'Условия использования',
+    demo_notice:'404 Демо',
     popular_choice:'Популярный выбор'
   },
   ka:{
@@ -42,6 +46,10 @@ const strings={
     tip_form:'სცადეთ სხვა ფორმა (ტაბლეტები, სიროფი, მალამო)',
     tip_spelling:'შეამოწმეთ მართლწერა',
     popular_title:'🔥 პოპულარული პრეპარატები',
+        feedback_link:'უკუკავშირი → @a_439',
+    privacy_policy:'კონფიდენციალურობის პოლიტიკა',
+    terms_of_use:'გამოყენების პირობები',
+    demo_notice:'404 დემო',
     popular_choice:'პოპულარული არჩევანი'
   }
 };
