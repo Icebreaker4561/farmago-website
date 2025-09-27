@@ -241,3 +241,28 @@ function init(){
   }
 }
 document.addEventListener('DOMContentLoaded',init);
+// Global demo button handler (emergency fix)
+document.addEventListener('click', function(e) {
+  if (e.target.id === 'demoBtn' || e.target.closest('#demoBtn')) {
+    e.preventDefault();
+    console.log('DEMO CLICKED via global handler');
+    showDemo();
+  }
+});
+
+// Also try direct onclick after DOM load
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(() => {
+    const btn = document.getElementById('demoBtn');
+    if (btn) {
+      btn.onclick = function(e) {
+        e.preventDefault();
+        console.log('DEMO CLICKED via direct onclick');
+        showDemo();
+      };
+      console.log('Demo button handler attached');
+    } else {
+      console.log('Demo button not found');
+    }
+  }, 500);
+});
