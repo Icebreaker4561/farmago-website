@@ -1,6 +1,27 @@
 const API_URL='https://farmago-web-api.onrender.com';
 const strings={
-  ru:{tagline:'Дешевые лекарства в Грузии',search_placeholder:'Введите название лекарства...',search_button:'Найти лекарство',results_title:'Результаты поиска',about_title:'О Farmago',about_description:'Farmago — быстрый способ сравнить цены на лекарства в аптеках Грузии.',view_pharmacy:'Посмотреть на',loading:'Поиск...',block_direct:'Наиболее подходящие',block_others:'Другие варианты'},
+  ru:{
+    tagline:'Дешевые лекарства в Грузии',
+    search_placeholder:'Введите название лекарства...',
+    search_button:'Найти лекарство',
+    results_title:'Результаты поиска',
+    about_title:'О Farmago',
+    about_description:'Farmago — быстрый способ сравнить цены на лекарства в аптеках Грузии.',
+    view_pharmacy:'Посмотреть на',
+    loading:'Поиск...',
+    block_direct:'Наиболее подходящие',
+    block_others:'Другие варианты',
+    empty_title:'Не нашли то, что искали?',
+    empty_subtitle:'Попробуйте изменить запрос или обратитесь к нам',
+    new_search:'🔍 Новый поиск',
+    contact_us:'💬 Написать нам',
+    search_tips_title:'💡 Советы для поиска:',
+    tip_international:'Используйте международное название',
+    tip_form:'Попробуйте другую форму (таблетки, сироп, мазь)',
+    tip_spelling:'Проверьте правильность написания',
+    popular_title:'🔥 Популярные препараты',
+    popular_choice:'Популярный выбор'
+  },
   ka:{
     tagline:'იაფი წამლები საქართველოში',
     search_placeholder:'შეიყვანეთ წამლის დასახელება...',
@@ -29,18 +50,8 @@ function t(k){return strings[state.lang]?.[k]||strings.ru[k]||k;}
 function clean(v){if(!v)return'';const s=String(v).trim();return['nan','NaN','none','None','null','undefined'].includes(s)?'':s;}
 function num(v){const n=Number(v);return Number.isFinite(n)?n:null;}
 function getTitle(item){
-  const ru = clean(item.title_russian);
-  const ka = clean(item.title);
-  const en = clean(item.title_english);
-  const name = clean(item.name);
-  
-  if(state.lang === 'ka') {
-    // KA mode: prefer Georgian, fallback to transliterated
-    return ka || name || ru || en || 'უცნობი';
-  } else {
-    // RU mode: ONLY Russian titles, no Georgian fallback
-    return ru || en || name || 'Название недоступно';
-  }
+  if(state.lang==='ka')return clean(item.title)||clean(item.name)||clean(item.title_russian)||'უცნობი';
+  return clean(item.title_russian)||clean(item.title_english)||clean(item.title)||'Название недоступно';
 }
 function updateUI(){
   document.querySelectorAll('.lang-btn').forEach(btn=>btn.classList.toggle('active',btn.dataset.lang===state.lang));
@@ -148,17 +159,13 @@ function init(){
   if(newSearchBtn)newSearchBtn.onclick=()=>{if(searchInput)searchInput.value='';showScreen('landing');};
   updateUI();
   if(searchInput)searchInput.focus();
+  // Popular drugs handler
+  document.addEventListener('click',(e)=>{
+    const item=e.target.closest('.popular-item');
+    if(item){
+      const query=item.dataset.query;
+      if(query){handleSearch.query=query;if(searchInput)searchInput.value=query;handleSearch();}
+    }
+  });
 }
 document.addEventListener('DOMContentLoaded',init);
-
-// Handle popular drug clicks
-document.addEventListener('click',(e)=>{
-  const item=e.target.closest('.popular-item');
-  if(item){
-    const query=item.dataset.query;
-    if(query){
-      const input=document.getElementById('searchInput');
-      if(input){input.value=query;handleSearch();}
-    }
-  }
-});
